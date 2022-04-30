@@ -2,10 +2,8 @@ import time
 import selenium.webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver import ActionChains
-from selenium.webdriver.support import expected_conditions as EC
 
 
 def test1():
@@ -44,6 +42,7 @@ def test3():
     driver.find_element(By.XPATH, "/html/body/div/div[1]/header/div[3]/div/div/div[2]/form/button").click()
 
     time.sleep(3)
+    driver.close()
 
 def test4():
     driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -56,6 +55,7 @@ def test4():
     driver.find_element(By.XPATH, '//*[@id="searchbox"]/button').click()
 
     time.sleep(3)
+    driver.close()
 
 def test5():
     driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -78,6 +78,8 @@ def test5():
 
     time.sleep(4)
 
+    driver.quit()
+
 def test6():
     driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     driver.get("http://automationpractice.com/index.php")
@@ -92,3 +94,4 @@ def test6():
     driver.find_element(By.XPATH, "//a[text()='Women']").click()
 
     time.sleep(4)
+    driver.close()
