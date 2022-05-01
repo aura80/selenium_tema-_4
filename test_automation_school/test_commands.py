@@ -3,9 +3,12 @@
 import time
 
 import selenium.webdriver
+from selenium.common.exceptions import NoSuchElementException, ElementNotSelectableException, ElementNotVisibleException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def test_get_application():
@@ -162,5 +165,54 @@ def test_text_getattribute():
     item_search.send_keys("jeans")
 
     print("Get_attribute value: ", item_search.get_attribute('value'))
+    print("Get_attribute type: ", item_search.get_attribute('type'))
+    print("Get_attribute id: ", item_search.get_attribute('id'))
+    print("Get_attribute name: ", item_search.get_attribute('name'))
+    print("Get_attribute class: ", item_search.get_attribute('class'))
+    print("Get_attribute placeholder: ", item_search.get_attribute('placeholder'))
 
     driver.quit()
+
+def test_implicitly_wait_command():
+    driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("https://www.google.com/")
+
+    driver.implicitly_wait(10)     # every element from now till quit affected
+
+    driver.find_element(By.XPATH, "//div[text()='Sunt de acord']").click()
+
+    elem = driver.find_element(By.XPATH, "//input[@name='q']")
+    elem.send_keys("Python")
+    elem.submit()       # enter on google page in absence of click button
+
+    list_elem = driver.find_elements(By.CSS_SELECTOR, 'h3.LC20lb.MBeuO.DKV0Md')
+    print("\nElements on the page: ", len(list_elem))
+    for el in list_elem:
+        print(el.text)
+
+    driver.find_element(By.XPATH, '//h3[text()="Welcome to Python.org"]').click()
+
+    driver.quit()
+
+def test_explicitly_wait_command():
+    driver= selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("https://www4.bing.com/?form=DCDN")
+
+    declaration = WebDriverWait(driver, 10, poll_frequency=2, ignored_exceptions=[NoSuchElementException,
+                                                                                  ElementNotVisibleException,
+                                                                                  ElementNotSelectableException,
+                                                                                  Exception])
+
+    elem = driver.find_element(By.XPATH, '//input[@id="sb_form_q"]')
+    elem.send_keys("Bucuresti")
+    elem.submit()
+
+    declaration.until(EC.presence_of_element_located((By.XPATH, '//a[text()="București - Wikipedia"]'))).click()
+
+    driver.quit()
+
+
+
+
+
+
