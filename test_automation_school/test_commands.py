@@ -65,4 +65,102 @@ def test_is_selected():
 
     driver.close()
 
+def test_browser_commands():
+    driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("https://demo.nopcommerce.com/register?returnUrl=%2F")
 
+    #   close()    -    quit()
+    driver.find_element(By.LINK_TEXT, 'nopCommerce').click()
+
+    time.sleep(3)
+
+    #driver.close()
+    driver.quit()
+
+def test_navigational_commands():
+    driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("https://www.emag.ro/")
+    driver.get("https://www.amazon.com/")
+
+    driver.back()
+    driver.forward()
+    driver.refresh()
+
+    driver.close()
+
+def test_find_element_elements():
+    driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("http://automationpractice.com/index.php")
+
+    ###  find_element() returns a single webelement !!!
+
+    # locator with one single element   // send_keys("") only for single element find_element(), not for find_elements() !!!!!
+    driver.find_element(By.XPATH,'//input[@id="newsletter-input"]').send_keys("abc@yahoo.com")
+
+    # locator with multiple elements
+    footer_elem = driver.find_element(By.XPATH, '//section[@id="block_various_links_footer"]//a')
+    print("\nOne element from many: ", footer_elem.text)     # printeaza doar un singur element, cel mai rapid
+
+    time.sleep(2)
+
+    ###  find_element() returns multiple webelements, it returns a list of webelements !!!
+
+    # a list of elements containing one element
+    list_one_element = driver.find_elements(By.XPATH, '//div[@id="newsletter_block_left"]')
+    print("Web elements found with find_elements() for one element locator : ", len(list_one_element))
+
+    print(list_one_element[0].text)
+
+    # a list of elements containing multiple elements
+    list_multi_elements = driver.find_elements(By.XPATH, '//div[@class="block_content toggle-footer"]//a')
+    print("Web elements found with find_elements() for multiple elements locator : ", len(list_multi_elements))
+
+    print(list_multi_elements[0].text)
+    print(list_multi_elements[1].text)
+    print(list_multi_elements[2].text)
+    print(list_multi_elements[3].text)
+
+    list_all = driver.find_elements(By.XPATH, '//footer[@id="footer"]//a')
+    print("\nElements in list: ", len(list_all))
+    for i in list_all:
+        print(i.text)
+
+    try:
+        # it gives error NoSuchElementException
+        driver.find_element(By.LINK_TEXT, 'Ecommerce soft')
+    except:
+        # no error
+        dim = driver.find_elements(By.LINK_TEXT, 'Ecommerce ™')
+        print("\nElements with exception: ", len(dim))
+
+
+    driver.close()
+
+
+def test_text_getattribute():
+    driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("https://opensource-demo.orangehrmlive.com/")
+
+    #     text    -    get_attribute()
+    username = driver.find_element(By.XPATH, '//div[@id="divUsername"]')
+    print("\nGet_attribute id: ", username.get_attribute('id'))
+    print("Get_attribute class: ", username.get_attribute('class'))
+    print("Get_attribute value: ", username.get_attribute('value'))
+
+    inner_text_user = driver.find_element(By.CSS_SELECTOR, '#divUsername .form-hint')
+    print("\nInner text username: ", inner_text_user.text)
+
+    time.sleep(2)
+
+    driver.get("http://automationpractice.com/index.php")
+
+    item_search = driver.find_element(By.XPATH, '//input[@id="search_query_top"]')
+    item_search.send_keys("shirt")
+
+    item_search.clear()
+
+    item_search.send_keys("jeans")
+
+    print("Get_attribute value: ", item_search.get_attribute('value'))
+
+    driver.quit()
