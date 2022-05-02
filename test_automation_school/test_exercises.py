@@ -84,3 +84,19 @@ def test_itera4():
 
     driver.quit()
 
+def test_itera5():
+    driver = selenium.webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get("https://itera-qa.azurewebsites.net/home/automation")
+
+    zi = driver.find_elements(By.XPATH, '//input[@type="checkbox" and contains(@id,"day")]')
+
+    time.sleep(5)
+
+    for i in zi:
+        if i.is_selected():
+            i.click()
+
+    time.sleep(2)
+
+    driver.quit()
+
