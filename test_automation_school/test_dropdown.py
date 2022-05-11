@@ -78,13 +78,15 @@ def test_dropdown4():
 
     driver.find_element(By.CSS_SELECTOR, '#cookieChoiceDismiss.cookie-choices-button').click()
 
-    speed = driver.find_element(By.XPATH, '//select[@id="speed"]/option[3]')
-    print("\n" ,speed.text)
+    speed = driver.find_element(By.CSS_SELECTOR, 'a.home-link')        #'//select[@id="speed"]/option[3]'
+    print("\n", speed.text)
 
     actions = ActionChains(driver)
     print(actions)
 
     actions.move_to_element(speed).click()
     print(driver.title)
+
+    time.sleep(3)
 
     driver.quit()
